@@ -8,7 +8,6 @@ const addNewProduct = require('./AdminProduct.js');
 const multer = require("multer");
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv');
-const uuid = require('uuid').v4;
 const cookieParser = require('cookie-parser');
 dotenv.config();
 
@@ -18,13 +17,13 @@ app.use(express.json());
 app.use(express.static('../client/src/Images'));
 app.use(cookieParser());
 app.use(cors({
-  origin: ['http://localhost:3000','http://127.0.0.1:3000'], 
+  origin: process.env.CLIENT_PORT, 
   credentials: true
 }));
 
 const stripe = require('stripe')(process.env.SECRET_KEY_STRIPE);
 
-mongoose.connect("mongodb://127.0.0.1/myDb", {
+mongoose.connect(process.env.MONGODB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }).then(() => console.log('MongoDB connected'))
@@ -36,9 +35,9 @@ const admin = async (req, res) => {
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
 
-  console.log(email.toString(), adminEmail.toString(), password.toString(), adminPassword.toString());
-
-  const isAdmin = email.toString() === adminEmail.toString() && password.toString() === adminPassword.toString();
+    console.log(email.toString(),adminEmail.toString(),password.toString(),adminPassword.toString());
+  
+    const isAdmin =  email === adminEmail && password === adminPassword;
 
   return isAdmin;
 }
@@ -71,7 +70,6 @@ const authenticateToken = async(req, res, next) => {
 
   app.post('/signupDB',async(req,res)=>{
     try{
-      console.log(req.body.email)
       const verify = await User.findOne({ email: req.body.email });
 
       if (verify){
@@ -105,7 +103,6 @@ const authenticateToken = async(req, res, next) => {
             const match = await bcrypt.compare(req.body.password, user.password);
             if (match) {
               generateToken(user,res);
-              console.log(req.cookies.token);
               res.json({ message: "false", nextPage: true });
             }
           }
@@ -168,7 +165,6 @@ app.post('/otp', (req, res) => {
 
 app.post('/otpDB', async (req, res) => {
   try {
-    console.log(req.body);
     if (req.body.storeOtp === req.body.formData.otp) {
       const newPassword = await bcrypt.hash(req.body.formData.password, 10)
 
@@ -194,7 +190,7 @@ app.post('/otpDB', async (req, res) => {
 app.post('/newProduct', upload.single('productImage'), async (req, res) => {
   const imageName = req.file.filename;
   try {
-    await addNewProduct.create({
+    const newProduct = await addNewProduct.create({
       image: imageName,
       product: req.body.productName,
       amount: req.body.productAmount,
@@ -204,6 +200,10 @@ app.post('/newProduct', upload.single('productImage'), async (req, res) => {
       add: req.body.productAdd,
       cusAdd: req.body.productAdd,
     });
+    await User.updateMany(
+      {},
+      { $push: { AdminProduct:  newProduct } }
+    );
     res.json({ message: 'Product was added', nextpage: true });
   } catch (err) {
     console.log(err);
@@ -222,7 +222,6 @@ app.get('/details', async (req, res) => {
 });
 
 app.put('/addElements', authenticateToken, async (req, res) => {
-  console.log(req.body.id)
   try {
     const particularUser = await User.findOne({ _id: req.user.id });
     if (particularUser) {
@@ -293,7 +292,6 @@ app.put('/customer', authenticateToken, async (req, res) => {
 app.get('/AddedDetails',authenticateToken,async(req,res) =>{
   const particularUser = await User.findOne({_id :req.user.id});
   if (particularUser){
-    console.log(particularUser.AdminProduct)
     res.json({content:particularUser.AdminProduct,nextState:true});
   }else{
     res.json({content:[],nextState:false});
@@ -324,7 +322,6 @@ app.delete(('/logout'),(req,res)=>{
 
 app.get("/checkStatus",async(req,res)=>{
   try{
-  token = req.cookies.token;
   const token = req.cookies.token;
   if (token == null)
     {
@@ -339,7 +336,7 @@ app.get("/checkStatus",async(req,res)=>{
     }}
   }
 catch{
-  res.json({Registeration:false,Status:false});
+  console.log({Registeration:false,Status:false});
 }
 })
 
@@ -371,7 +368,8 @@ app.post('/stripe', async (req, res) => {
   }
 });
 
+
+
 app.listen(3001, () => {
   console.log('Server is running on port 3001');
 });
-
