@@ -39,7 +39,7 @@ app.use("/loginDB", LoginController);
 app.use("/signupDB",signupController);
 
 
-const authenticateToken = async(req, res, next) => {
+/* const authenticateToken = async(req, res, next) => {
   const token = req.cookies.token;
   if (token == null)
     {
@@ -52,8 +52,9 @@ const authenticateToken = async(req, res, next) => {
     } catch (err) {
       return res.json({ message: 'Token is not valid' });
     }
-}; 
-app.post('/signupDB',async(req,res)=>{
+}; */
+
+  /* app.post('/signupDB',async(req,res)=>{
     try{
       const verify = await User.findOne({ email: req.body.email });
 
@@ -97,7 +98,7 @@ app.post('/signupDB',async(req,res)=>{
     console.error(error);
     res.json({ message: "Login failed!!!!", nextPage: false });
   }
-  }); 
+  }); */
 
 
   
@@ -114,7 +115,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.post('/otp', (req, res) => {
+/* app.post('/otp', (req, res) => {
 
   const { formData, otp } = req.body;
 
@@ -181,7 +182,7 @@ app.post('/otpDB', async (req, res) => {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-}); 
+}); */
 
 app.post('/newProduct', upload.single('productImage'), async (req, res) => {
   const imageName = req.file.filename;
@@ -259,7 +260,7 @@ app.put('/customer', authenticateToken, async (req, res) => {
       console.log("way to Procedure")
       res.json({ message: "way to Procedure",nextState:true});
     }
-    if (particularUser) {
+    /*if (particularUser) {
       let productUpdated = false;
       particularUser.AdminProduct.forEach((product, index) => {
         if (product._id.toString()===req.body.detail._id) {
@@ -277,7 +278,7 @@ app.put('/customer', authenticateToken, async (req, res) => {
       }
     } else {
       res.status(404).json("User not found");
-    }
+    }*/
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json("Error");
@@ -378,6 +379,9 @@ app.post('/stripe', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
+
+
 app.listen(3001, () => {
   console.log('Server is running on port 3001');
 });
