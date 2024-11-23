@@ -3,7 +3,7 @@ const User = require('./User.js');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
+
 const addNewProduct = require('./AdminProduct.js');
 const Client_Details = require('./ClientDetails.js');
 const multer = require("multer");

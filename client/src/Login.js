@@ -36,7 +36,11 @@ return (
             Login
             </button>
     <div className='mt-3'>
-                <Link className='text-blue-600' to={'/signup'}>Want to Signup..</Link>
+        <div className='flex justify-between'>
+        <Link className='text-blue-600' to={'/signup'}>Want to Signup..</Link>
+        <Link  className='text-blue-600'>Forget Password</Link>
+        </div>
+                
                 </div>
         </form>
         

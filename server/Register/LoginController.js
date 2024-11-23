@@ -5,6 +5,7 @@ dotenv.config();
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
 const User = require('../User.js');
+const generateToken = require('./generatingToken.js')
 
 const admin = async (req, res) => {
     const { email, password } = req.body;
@@ -16,7 +17,7 @@ const admin = async (req, res) => {
     return isAdmin;
   }
 
-  const generateToken = async(user ,res) => {
+/*   const generateToken = async(user ,res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.cookie('token', token, {
       httpOnly: true,
@@ -24,7 +25,7 @@ const admin = async (req, res) => {
       sameSite: 'strict',            
       path: '/' 
     });
-  };
+  }; */
 
 
 router.post('/', async (req, res) => {

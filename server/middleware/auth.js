@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 
 module.exports =  async(req, res, next) => {
     const token = req.cookies.token;
+    
     if (token == null)
       {
         return res.json({message:"Signup before adding element to the cart"})

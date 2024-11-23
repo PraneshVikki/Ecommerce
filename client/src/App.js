@@ -102,7 +102,7 @@ useEffect(()=>{
   setTimeout(() => {
     setRegisteration("Signup or Register");
     setStatus("false")
-  }, 3600000); 
+  }, 604800000); 
 },[registeration,status])
 
 
@@ -213,7 +213,13 @@ const handleChange = (e) => {
     console.log(formData);
     axios.post('http://localhost:3001/signupDB', formData)
       .then(result => {
-        toast(result.data.message);
+        console.log(result.data.message);
+        if(!result.data.nextPage){
+          toast(("You are already login.."),{
+            pauseOnHover: true,
+            draggable: true,
+          });
+        }
         if (result.data.nextPage) {
           navigate('/confirmEmail', { otpHandleChange, otpHandleSubmit, storeOtp,formData,setStoreOtp });
         }
@@ -262,7 +268,7 @@ const otpHandleChange = (e)=>{
 const otpHandleSubmit = (e)=>{
   e.preventDefault()
   console.log(storeOtp,formData);
-  axios.post(('http://localhost:3001/otpDB'),{storeOtp,formData,clientDetails}).then(result=>{
+  axios.post(('http://localhost:3001/signupDB/otpDB'),{storeOtp,formData,clientDetails}).then(result=>{
     console.log("Success");
     if (result.data.nextPage){
       setRegisteration("Logout")
@@ -274,7 +280,6 @@ const otpHandleSubmit = (e)=>{
 }
 
 const handleAdd = (e)=>{
-  console.log(e)
   axios.put('http://localhost:3001/addElements',{id:e})
   .then(result=>{
     if (result.data.toggling===true){
@@ -282,6 +287,12 @@ const handleAdd = (e)=>{
         pauseOnHover: true,
         draggable: true,
       });}
+    else{
+      toast((result.data.message),{
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
   })
   .catch(console.log("Error"))
   
@@ -393,7 +404,7 @@ const clientDetailsChange = (e)=>{
         <Route path='/procedure' element={<Procedure AddedDetails={AddedDetails} handleStripe={handleStripe}clientDetails={clientDetails} setClientDetails={setClientDetails} clientDetailsChange={clientDetailsChange}/>}/>
         <Route path='/cancel' element={<Cancel />}></Route>
         <Route path='/success' element={<Success clientDetails={clientDetails}/>}></Route>
-        <Route path='/test' element={<Test />}/>
+        {/* <Route path='/test' element={<Test />}/> */}
         
         </Routes></PropRegister.Provider>
         </div>

@@ -1,6 +1,12 @@
-const express = require('express')
+const express = require('express');
+const nodemailer = require('nodemailer');
 const router = express.Router();
-const User = require('./User.js');
+const User = require('../User.js');
+const generateToken = require('./generatingToken.js');
+const bcrypt = require('bcrypt');
+const addNewProduct = require('../AdminProduct.js');
+const dotenv = require('dotenv');
+dotenv.config();
 
 router.post('/',async(req,res)=>{
     try{
@@ -55,7 +61,8 @@ router.post('/',async(req,res)=>{
   router.post('/otpDB', async (req, res) => {
     try {
       if (req.body.storeOtp === req.body.formData.otp) {
-        const newPassword = await bcrypt.hash(req.body.formData.password, 10)
+        const salt = await bcrypt.genSalt(10)
+        const newPassword = await bcrypt.hash(req.body.formData.password, salt)
   
         const allProducts = await addNewProduct.find({});
         console.log(allProducts)
