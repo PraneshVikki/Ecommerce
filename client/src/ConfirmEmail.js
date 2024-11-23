@@ -11,7 +11,7 @@ function ConfirmEmail({ otpHandleChange, otpHandleSubmit, storeOtp, formData, se
       otp = otp.toString();
       console.log(otp)
       setStoreOtp(otp);
-      axios.post('http://127.0.0.1:3001/otp', { otp, formData })
+      axios.post('http://localhost:3001/signupDB/otp', { otp, formData })
         .then(response => {
           console.log(response);
         })
