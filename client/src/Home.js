@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 
-function Home({ details,setDetailds, handleAdd,handleAddedDetails,registeration,handleLogout,status}) {
+function Home({ details, handleAdd,handleAddedDetails,registeration,handleLogout,status}) {
   return (
     <div className='w-full'>
       <div className=''>
@@ -13,7 +13,7 @@ function Home({ details,setDetailds, handleAdd,handleAddedDetails,registeration,
       </div>
     <div>
       <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 bg-gradient-to-r from-sky-900 from-5% to-black px-1 lg:px-5 md:px-5 sm:px-0'>
-        {details.map((detail) => (
+        {details?.data.map((detail) => (
           <div className='p-5 bg-slate-600  w-200 rounded-lg shadow-md' key={detail.id}>
             <img className='object-cover h-48 w-96 border   rounded-xl ' src={`http://127.0.0.1:3001/`+detail.image} alt="" />
             <p className=' mt-2 text-white text-sm sm:text-md md:text-lg'>{detail.product}</p>

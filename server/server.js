@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.static('../client/src/Images'));
 app.use(cookieParser());
 app.use(cors({
-  origin: ['http://localhost:3000','http://127.0.0.1:3000'], 
+  origin: ['http://localhost:3000','http://127.0.0.1:3000','http://localhost:3002','http://127.0.0.1:3002'], 
   credentials: true
 }));
 
@@ -293,7 +293,7 @@ app.get('/AddedDetails',authenticateToken,async(req,res) =>{
   }else{
     res.json({content:[],nextState:false});
   }
-})
+}) 
 
 app.delete('/removeItem', async (req, res) => {
   try {

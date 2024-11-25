@@ -16,6 +16,7 @@ import Procedure from './Procedure';
 import { Test } from './Test';
 import Cancel from './Cancel';
 import Success from './Success';
+import { useQuery } from 'react-query';
 
 axios.defaults.withCredentials = true;
 export const PropRegister = createContext()
@@ -37,7 +38,7 @@ const [loginFormData, setLoginFormData] = useState({
   password: '',
 });
 const [storeOtp,setStoreOtp] = useState("");
-const [details,setDetails] = useState([])
+/* const [details,setDetails] = useState([]) */
 const [priceLimit,setPriceLimit] = useState(false);
 const [storeProduct, setStoreProduct] = useState({
   productImage: null,
@@ -64,7 +65,7 @@ const [clientDetails, setClientDetails] = useState({
 
 
 const navigate = useNavigate();
-useEffect(()=>{
+/* useEffect(()=>{
   axios.get('http://localhost:3001/details')
   .then(result=>{
       const detailsArray = result.data.map(re => ({
@@ -82,7 +83,13 @@ useEffect(()=>{
       setDetails(detailsArray);
   }).catch((err)=>{console.log(err)})
   
-},[])
+},[]) */
+
+const { data: details, isLoading : isDetailsLoading , isError :isDetailsError , error : detailsError , isFetching} = useQuery("Product-details", async () => {
+  return await axios.get('http://localhost:3001/details');
+});
+console.log(details)
+
 
 useEffect(() => {
   axios.get('http://localhost:3001/checkStatus').then((result)=>{
@@ -387,6 +394,17 @@ const clientDetailsChange = (e)=>{
   console.log(clientDetails)
 }
 
+if(isDetailsLoading){
+  <p>Loading</p>
+}
+
+if(isDetailsError){
+  <p>{detailsError}</p>
+}
+
+if(isFetching){
+  console.log("fetching")
+}
 
 
   return (
@@ -394,7 +412,7 @@ const clientDetailsChange = (e)=>{
       <div className='bg-gradient-to-r w-full h-full from-sky-900 from-5% to-black min-h-screen bg-cover '>
       <PropRegister.Provider value={{ registeration, status }}>
         <Routes>
-        <Route path='/' element = {<Home details={details} setDetails={setDetails} handleAdd={handleAdd} handleAddedDetails={handleAddedDetails}  registeration={registeration} handleLogout={handleLogout} status={status}/>}/>
+        <Route path='/' element = {<Home details={details} handleAdd={handleAdd} handleAddedDetails={handleAddedDetails}  registeration={registeration} handleLogout={handleLogout} status={status}/>}/>
         <Route path='/signup' element = {<Signup formData={formData} setFormData={setFormData} handleChange={handleChange} handleSubmit={handleSubmit} password={password} passwordError={passwordError} submit={submit} setSubmit={setSubmit}/>}/>
         <Route path='/login' element = {<Login loginFormData={loginFormData} LoginHandleChange={LoginHandleChange} LoginHandleSubmit={LoginHandleSubmit}/>}/>
         <Route path='/confirmEmail' element = {<ConfirmEmail otpHandleChange={otpHandleChange} otpHandleSubmit={otpHandleSubmit} storeOtp={storeOtp} formData={formData} setStoreOtp={setStoreOtp}/>}/>
