@@ -88,8 +88,6 @@ const navigate = useNavigate();
 const { data: details, isLoading : isDetailsLoading , isError :isDetailsError , error : detailsError , isFetching} = useQuery("Product-details", async () => {
   return await axios.get('http://localhost:3001/details');
 });
-console.log(details)
-
 
 useEffect(() => {
   axios.get('http://localhost:3001/checkStatus').then((result)=>{
@@ -403,7 +401,7 @@ if(isDetailsError){
 }
 
 if(isFetching){
-  console.log("fetching")
+  console.log("fetching");
 }
 
 
