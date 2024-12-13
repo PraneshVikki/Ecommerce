@@ -1,21 +1,21 @@
 import './App.css';
 import axios from 'axios';
-import Login from './Login';
+import Login from './Components/Feature1/Login';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import Home from './Home';
-import Signup from './Signup';
-import ConfirmEmail from './ConfirmEmail';
+import Home from './Components/Feature1/Home';
+import Signup from './Components/Feature1/Signup';
+import ConfirmEmail from './Components/Feature1/ConfirmEmail';
 import { createContext, useEffect, useState } from 'react';
-import About from './About';
-import Add from './Add';
-import AdminAddProduct from './AdminAddProduct';
+import About from './Components/Feature1/About';
+import Add from './Components/Feature1/Add';
+import AdminAddProduct from './Components/Feature2/AdminAddProduct';
 import React from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Procedure from './Procedure';
+import Procedure from './Components/Feature1/Procedure';
 import { Test } from './Test';
-import Cancel from './Cancel';
-import Success from './Success';
+import Cancel from './Components/Feature1/Cancel';
+import Success from './Components/Feature1/Success';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
 
 axios.defaults.withCredentials = true;
@@ -157,19 +157,46 @@ const {mutate } = useMutation((adminData)=>{
   axios.post('http://localhost:3001/newProduct', adminData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-    }})
+    }})/* 
   .then(result => {
     console.log(result.data.message);
     toast(("Item was added"),{
       pauseOnHover: true,
       draggable: true,
     })
-  }).catch(err => console.log(err));
+  }).catch(err => console.log(err)); */
 },{
-  onSuccess: ()=>{
-    queryClient.invalidateQueries("Product-details");
-    console.log("Success");
+  onSuccess:(data)=>{
+    //queryClient.invalidateQueries("Product-details");
+    console.log(data);
+    if(data){
+      queryClient.setQueryData("Product-details",(oldQuery)=>{
+        return {
+          ...oldQuery,
+          data:[...oldQuery.data,data.data]
+        }
+      })
+      console.log("Success") 
+    }
   }
+ /* onMutate:async(adminData)=>{
+  await queryClient.cancelMutations();
+  const previousProduct = queryClient.getQueryData("Product-details");
+  queryClient.setQueryData("Product-details",(oldQuery)=>{
+    return {
+      ...oldQuery,
+      data:[...oldQuery.data,adminData.data]
+    }
+  })
+  return previousProduct;
+ },
+ onError:(_error,_adminData,context)=>{
+  queryClient.setQueryData("Product-details",context.previousProduct);
+ },
+ onSettled:()=>{
+  queryClient.invalidateQueries("Product-details")
+ } */
+
 })
 
 const handleProduct = (e) => {
@@ -181,7 +208,14 @@ const handleProduct = (e) => {
   adminData.append('productAmount', storeProduct.productAmount);
   adminData.append('productPrice', storeProduct.productPrice);
   adminData.append('productAdd', storeProduct.productAdd); 
-  mutate(adminData)
+  toast(("It will take some time to add!!"),{
+    pauseOnHover: true,
+    draggable: true,
+  })
+  if(adminData){
+    console.log(adminData)
+    mutate(adminData)
+  }
 /*   axios.post('http://localhost:3001/newProduct',   adminData, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -213,7 +247,6 @@ const handleProductChange = (e) => {
     }));
     
   }
-  console.log(storeProduct)
 };
 
 
@@ -235,7 +268,6 @@ const handleChange = (e) => {
 };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
     axios.post('http://localhost:3001/signupDB', formData)
       .then(result => {
         console.log(result.data.message);
@@ -271,7 +303,6 @@ const LoginHandleSubmit = (e) => {
     }
     if (result.data.message === "false"){
       setStatus(false);
-      console.log(result.data.user.clientDetails[0])
       //setClientDetails(result.data.user.clientDetails[0]); 
       //console.log(clientDetails);
     }
@@ -292,9 +323,8 @@ const otpHandleChange = (e)=>{
 }
 const otpHandleSubmit = (e)=>{
   e.preventDefault()
-  console.log(storeOtp,formData);
   axios.post(('http://localhost:3001/signupDB/otpDB'),{storeOtp,formData,clientDetails}).then(result=>{
-    console.log("Success");
+    
     if (result.data.nextPage){
       setRegisteration("Logout")
       navigate('/');
@@ -334,7 +364,6 @@ const handlePrice = (e, detail) => {
     const found = prevDetails[detailIndex];
     const curPrice = Math.ceil(((newCusAmount % found.amount) / found.amount) * found.price + (newCusAmount / found.amount) * found.price);
     let pl = false;
-    console.log(curPrice,found.amount,curPrice<found.amount,newCusAmount)
     if (newCusAmount<found.amount){
       pl = true;
     }else{
@@ -369,24 +398,26 @@ const handlePrice = (e, detail) => {
   console.log(details); */
 }
 
-const {mutate: removeMutate} = useMutation((id)=>{
-  axios.delete('http://localhost:3001/removeItem', {
-    data: { id: id },
-  })
-  .then((result) => {
-    toast((result.data.message),{
-      pauseOnHover: true,
-      draggable: true,
-    })
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-},{
-  onSuccess:()=>{
-    queryClient.invalidateQueries("Product-details");
+const { mutate: removeMutate } = useMutation(
+  (id) => {
+    return axios.delete('http://localhost:3001/removeItem', {
+      data: { id: id },
+    });
+  },
+  {
+    onSuccess: (data) => {
+      queryClient.setQueryData("Product-details", (oldQuery) => {
+        if (!oldQuery) return; 
+        return {
+          ...oldQuery,
+          data: oldQuery.data.filter((item) => item._id !== data.data.id),
+        };
+      });
+      console.log("Success");
+    },
   }
-})
+);
+
 const handleDelete = (id) => {
   /* axios.delete('http://localhost:3001/removeItem', {
       data: { id: id },
@@ -405,7 +436,6 @@ const handleDelete = (id) => {
 
 const handleLogout = ()=>{
   axios.delete('http://localhost:3001/logout').then((result)=>{
-    console.log(result.data)
     setRegisteration("Signup or Register");
     setStatus("false")
   })
@@ -415,7 +445,6 @@ const handleStripe = ()=>{
 
   console.log(AddedDetails)
   axios.post('http://localhost:3001/stripe',{AddedDetails,clientDetails}).then((result)=>{
-    console.log(result.data);
     window.location = result.data.url;
   })
 }

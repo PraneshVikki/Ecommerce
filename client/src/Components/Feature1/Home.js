@@ -16,7 +16,7 @@ function Home({ details, handleAdd,handleAddedDetails,registeration,handleLogout
         {details?.data.map((detail) => (
           <div className='p-5 bg-slate-600  w-200 rounded-lg shadow-md' key={detail.id}>
             <img className='object-cover h-48 w-96 border   rounded-xl ' src={`http://127.0.0.1:3001/`+detail.image} alt="" />
-            <p className=' mt-2 text-white text-sm sm:text-md md:text-lg'>{detail.product}</p>
+            <p className=' mt-2 text-white text-sm sm:text-md md:text-lg'>{detail.product}</p> 
             <p className='text-white text-sm sm:text-md md:text-lg'>Minimum amount in kg {detail.amount}</p>
             <div className='flex justify-between'>
             <p className='text-white text-md sm:text-lg md:text-xl'>&#8377;{detail.price}</p>

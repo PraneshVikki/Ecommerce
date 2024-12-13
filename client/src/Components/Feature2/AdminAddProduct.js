@@ -92,20 +92,40 @@ function AdminAddProduct({storeProduct, handleProductChange,handleProduct,detail
                     </div>
                 </div>
 
-                <div className={`grid grid-cols-${view} gap-5 rounded-xl `}>
-                    {details?.data.map((detail) => (
-                        <div className='p-5 bg-slate-600 h-fit w-100 rounded-md shadow-md' key={detail._id}>
-                            <img className='object-cover h-24 w-48 border rounded-xl ' src={`http://127.0.0.1:3001/`+detail.image} alt="" />
-                            <p className=' mt-2 text-white text-sm'>{detail.product}</p>
-                            <p className='text-white text-sm sm'>Minimum amount in kg {detail.amount}</p>
-                            <div className='flex justify-between'>
-                            <p className='text-white text-md sm'>&#8377; {detail.price}</p>
-                            <button type='submit' onClick={(e)=>handleDelete(detail._id)} className='bg-red-500 rounded p-0.5 text-white text-sm'>Remove item</button>
+                <div className={`grid grid-cols-${view} gap-5 rounded-xl`}>
+                    {details?.data?.map((detail) => (
+                        detail && (
+                        <div
+                            className="p-5 bg-slate-600 h-fit w-100 rounded-md shadow-md"
+                            key={detail._id}
+                        >
+                            {detail.image && (
+                            <img
+                                className="object-cover h-24 w-48 border rounded-xl"
+                                src={`http://127.0.0.1:3001/${detail.image}`}
+                                alt={detail.product || "Product image"}
+                            />
+                            )}
+                            <p className="mt-2 text-white text-sm">{detail.product}</p>
+                            <p className="text-white text-sm">
+                            Minimum amount in kg {detail.amount}
+                            </p>
+                            <div className="flex justify-between">
+                            <p className="text-white text-md">&#8377; {detail.price}</p>
+                            <button
+                                type="submit"
+                                onClick={() => handleDelete(detail._id)}
+                                className="bg-red-500 rounded p-0.5 text-white text-sm"
+                            >
+                                Remove item
+                            </button>
                             </div>
                             <ToastContainer autoClose={2000} />
                         </div>
+                        )
                     ))}
-                </div>
+                    </div>
+
             </div>
         </div>
         </div>

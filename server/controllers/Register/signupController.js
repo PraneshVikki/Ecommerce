@@ -1,10 +1,10 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
 const router = express.Router();
-const User = require('../User.js');
+const User = require('../../models/User.js');
 const generateToken = require('./generatingToken.js');
 const bcrypt = require('bcrypt');
-const addNewProduct = require('../AdminProduct.js');
+const addNewProduct = require('../../models/AdminProduct.js');
 const dotenv = require('dotenv');
 dotenv.config();
 

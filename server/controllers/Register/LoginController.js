@@ -4,7 +4,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt');
-const User = require('../User.js');
+const User = require('../../models/User.js');
 const generateToken = require('./generatingToken.js')
 
 const admin = async (req, res) => {

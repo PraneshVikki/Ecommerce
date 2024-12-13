@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import Logo from './Images/Logo.png';
+import Logo from '../../assets/Images/Logo.png';
 import axios from 'axios';
 
 function ConfirmEmail({ otpHandleChange, otpHandleSubmit, storeOtp, formData, setStoreOtp }) {

@@ -1,6 +1,6 @@
 import React from 'react';
-import './index.css';
-import Logo from './Images/Logo.png';
+import '../../index.css';
+import Logo from '../../assets/Images/Logo.png';
 import { Link } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
 

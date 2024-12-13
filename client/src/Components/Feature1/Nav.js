@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { MdAddShoppingCart } from "react-icons/md";
-import { PropRegister } from './App';
+import { PropRegister } from '../../App';
 const Nav = ({handleAddedDetails,handleLogout}) => {
   
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import cancelImage from './Success/cancelImage.png'
+import cancelImage from '../../assets/Success/CancelImage.png'
 import { Link } from 'react-router-dom'
 const Cancel = () => {
   return (

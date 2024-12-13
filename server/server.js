@@ -1,11 +1,11 @@
 const express = require('express');
-const User = require('./User.js');
+const User = require('./models/User.js');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-const addNewProduct = require('./AdminProduct.js');
-const Client_Details = require('./ClientDetails.js');
+const addNewProduct = require('./models/AdminProduct.js');
+const Client_Details = require('./models/ClientDetails.js');
 const multer = require("multer");
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv');
@@ -15,7 +15,7 @@ const authenticateToken = require('./middleware/auth.js')
 
 const app = express();
 app.use(express.json());
-app.use(express.static('../client/src/Images'));
+app.use(express.static('../client/src/assets/Images'));
 app.use(cookieParser());
 app.use(cors({
   origin: ['http://localhost:3000','http://127.0.0.1:3000','http://localhost:3002','http://127.0.0.1:3002'], 
@@ -24,8 +24,8 @@ app.use(cors({
 
 const stripe = require('stripe')(process.env.SECRET_KEY_STRIPE);
 
-const LoginController = require('./Register/LoginController.js')
-const signupController = require('./Register/signupController.js')
+const LoginController = require('./controllers/Register/LoginController.js')
+const signupController = require('./controllers/Register/signupController.js')
 
 
 mongoose.connect(process.env.MONGODB, {
@@ -105,7 +105,7 @@ app.use("/signupDB",signupController);
   
 const storage = multer.diskStorage({
   destination: function(req, file, cb){
-    cb(null, '../client/src/Images');
+    cb(null, '../client/src/assets/Images');
   },
   filename: function(req, file, cb) {
     const uniqueSuffix = Date.now();

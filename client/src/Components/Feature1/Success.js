@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import GreenTick from './Success/Green-Tick-Vector-PNG-Photos.png'
+import GreenTick from '../../assets/Success/Green-Tick-Vector-PNG-Photos.png'
 
 const Success = ({clientDetails}) => {
 

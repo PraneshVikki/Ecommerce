@@ -1,5 +1,5 @@
 import React from 'react'
-import Logo from './Images/Logo.png'
+import Logo from '../../assets/Images/Logo.png'
 import { Link } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
 function Login({loginFormData, LoginHandleChange, LoginHandleSubmit}) {
