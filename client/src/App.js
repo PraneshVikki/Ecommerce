@@ -17,6 +17,7 @@ import { Test } from './Test';
 import Cancel from './Components/Feature1/Cancel';
 import Success from './Components/Feature1/Success';
 import { QueryClient, useMutation, useQuery, useQueryClient } from 'react-query';
+import Review from './Components/Feature3/Review';
 
 axios.defaults.withCredentials = true;
 export const PropRegister = createContext()
@@ -486,6 +487,7 @@ if(isFetching){
         <Route path='/procedure' element={<Procedure AddedDetails={AddedDetails} handleStripe={handleStripe}clientDetails={clientDetails} setClientDetails={setClientDetails} clientDetailsChange={clientDetailsChange}/>}/>
         <Route path='/cancel' element={<Cancel />}></Route>
         <Route path='/success' element={<Success clientDetails={clientDetails}/>}></Route>
+        <Route path='/review/:revId' element={<Review details={details}/>}></Route>
         {/* <Route path='/test' element={<Test />}/> */}
         
         </Routes></PropRegister.Provider>

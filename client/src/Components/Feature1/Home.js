@@ -3,6 +3,7 @@ import Nav from './Nav';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 
 function Home({ details, handleAdd,handleAddedDetails,registeration,handleLogout,status}) {
@@ -14,8 +15,10 @@ function Home({ details, handleAdd,handleAddedDetails,registeration,handleLogout
     <div>
       <div className='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 bg-gradient-to-r from-sky-900 from-5% to-black px-1 lg:px-5 md:px-5 sm:px-0'>
         {details?.data.map((detail) => (
-          <div className='p-5 bg-slate-600  w-200 rounded-lg shadow-md' key={detail.id}>
-            <img className='object-cover h-48 w-96 border   rounded-xl ' src={`http://127.0.0.1:3001/`+detail.image} alt="" />
+          <div className='p-5 bg-slate-600  w-200 rounded-lg shadow-md' key={detail._id}>
+            <Link to={`review/${detail.image.slice(0,-4)}`}>
+              <img className='object-cover h-48 w-96 border   rounded-xl ' src={`http://127.0.0.1:3001/`+detail.image} alt="" />
+            </Link>
             <p className=' mt-2 text-white text-sm sm:text-md md:text-lg'>{detail.product}</p> 
             <p className='text-white text-sm sm:text-md md:text-lg'>Minimum amount in kg {detail.amount}</p>
             <div className='flex justify-between'>
