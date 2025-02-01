@@ -22,9 +22,6 @@ import Review from './Components/Feature3/Review';
 axios.defaults.withCredentials = true;
 export const PropRegister = createContext()
 function App() {
-
-  
-
   const [formData, setFormData] = useState({
     name: '',
     email: '',

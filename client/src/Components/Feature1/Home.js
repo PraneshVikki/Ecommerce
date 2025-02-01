@@ -23,7 +23,7 @@ function Home({ details, handleAdd,handleAddedDetails,registeration,handleLogout
             <p className='text-white text-sm sm:text-md md:text-lg'>Minimum amount in kg {detail.amount}</p>
             <div className='flex justify-between'>
             <p className='text-white text-md sm:text-lg md:text-xl'>&#8377;{detail.price}</p>
-            <button type='submit' onClick={() => handleAdd(detail.id)} className='bg-sky-600 rounded p-1 text-white'>Add to Cart</button>
+            <button type='submit' onClick={() => handleAdd(detail._id)} className='bg-sky-600 rounded p-1 text-white'>Add to Cart</button>
             </div>
             <ToastContainer autoClose={2000} />
           </div>
