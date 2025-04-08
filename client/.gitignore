@@ -10,7 +10,7 @@
 /src/assets/Images
 # production
 /build
-.Test.js
+/Test.js
 # misc
 .DS_Store
 .env.local

@@ -469,6 +469,7 @@ if(isFetching){
 }
 
 
+
   return (
     <div className="App">
       <div className='bg-gradient-to-r w-full h-full from-sky-900 from-5% to-black min-h-screen bg-cover '>

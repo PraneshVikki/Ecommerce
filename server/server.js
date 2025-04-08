@@ -28,10 +28,7 @@ const LoginController = require('./controllers/Register/LoginController.js')
 const signupController = require('./controllers/Register/signupController.js')
 
 
-mongoose.connect(process.env.MONGODB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => console.log('MongoDB connected'))
+mongoose.connect(process.env.MONGODB).then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
 
 app.use("/loginDB", LoginController);
@@ -386,3 +383,4 @@ app.post('/stripe', async (req, res) => {
 app.listen(3001, () => {
   console.log('Server is running on port 3001');
 });
+
