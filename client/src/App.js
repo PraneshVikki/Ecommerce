@@ -290,7 +290,7 @@ const LoginHandleChange = (e) => {
 };
 const LoginHandleSubmit = (e) => {
   e.preventDefault();
-  axios.post('http://localhost:3001/loginDB',  loginFormData).then(result => {
+  axios.post('http://localhost:3001/loginDB',loginFormData).then(result => {
     if (result.data.message === "true"){
       setStatus(true);
       /*{setClientDetails(

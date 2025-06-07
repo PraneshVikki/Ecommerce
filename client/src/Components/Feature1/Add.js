@@ -17,7 +17,6 @@ const Add = ({ AddedDetails, handlePrice,handleChanges }) => {
   const navigate = useNavigate();
   useEffect(() => {
     axios.get('http://localhost:3001/checkStatus').then((result)=>{
-      console.log(result.data)
       result.data.Registeration === true?navigate('/add'):navigate('/login')
       console.log("executed")
     })

@@ -27,6 +27,7 @@ const stripe = require('stripe')(process.env.SECRET_KEY_STRIPE);
 const LoginController = require('./controllers/Register/LoginController.js')
 const signupController = require('./controllers/Register/signupController.js')
 
+app.disable('x-powered-by');
 
 mongoose.connect(process.env.MONGODB).then(() => console.log('MongoDB connected'))
 .catch(err => console.log(err));
@@ -35,70 +36,7 @@ app.use("/loginDB", LoginController);
 
 app.use("/signupDB",signupController);
 
-
-/* const authenticateToken = async(req, res, next) => {
-  const token = req.cookies.token;
-  if (token == null)
-    {
-      return res.json({message:"Signup before adding element to the cart"})
-    }
-    try {
-      const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = decoded;
-      next();                 
-    } catch (err) {
-      return res.json({ message: 'Token is not valid' });
-    }
-}; */
-
-  /* app.post('/signupDB',async(req,res)=>{
-    try{
-      const verify = await User.findOne({ email: req.body.email });
-
-      if (verify){
-        return(res.json({message:"You are already login..",nextPage:false}))
-      }
-      else{
-        return(res.json({message:"You will receive an otp",nextPage:true}))
-      }
-    }
-    catch{
-      res.json({message:"Internal server error",nextPage:false})
-    }
-  })
-
-  app.post('/loginDB', async (req, res) => {
-    try {
-        const adminPermission  = await admin(req,res);
-        if (adminPermission === true){
-          res.cookie('token', process.env.ADMIN_TOKEN, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',       
-            path: '/' 
-          });
-          res.json({message: "true", nextPage: true})
-        }else{
-          const user = await User.findOne({ email: req.body.email });
-          if (user) {
-            const match = await bcrypt.compare(req.body.password, user.password);
-            if (match) {
-              generateToken(user,res);
-              res.json({ message: "false", nextPage: true ,user:user });
-            }
-          }
-          else{
-          res.json({ message: "Login failed!!", nextPage: false });
-          }
-        }
-  } catch (error) {
-    console.error(error);
-    res.json({ message: "Login failed!!!!", nextPage: false });
-  }
-  }); */
-
-
-  
+ 
   
 const storage = multer.diskStorage({
   destination: function(req, file, cb){
@@ -111,75 +49,6 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-
-/* app.post('/otp', (req, res) => {
-
-  const { formData, otp } = req.body;
-
-  if (!formData || !formData.email || !otp) {
-    return res.status(400).json({ message: 'Invalid request data' });
-  }
-
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'praneshmern@gmail.com',
-      pass: 'lvjdiqyfibjactij',
-    }
-  });
-
-  const mailOptions = {
-    from: 'praneshmern@gmail.com',
-    to: formData.email,
-    subject: 'Your OTP Code',
-    text: `Your OTP code is: ${otp}`
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email:', error);
-      return res.status(500).json({ message: 'Error sending email' });
-    } else {
-      console.log('Email sent:', info.response);
-      return res.json({ message: 'Email sent successfully' });
-    }
-  });
-});
-
-app.post('/otpDB', async (req, res) => {
-  try {
-    if (req.body.storeOtp === req.body.formData.otp) {
-      const newPassword = await bcrypt.hash(req.body.formData.password, 10)
-
-      const allProducts = await addNewProduct.find({});
-      console.log(allProducts)
-      const newUser = await User.create({
-        name: req.body.formData.name,
-        email: req.body.formData.email,
-        password: newPassword,
-        AdminProduct: allProducts,
-        clientDetails: [{
-          clientName: req.body.clientDetails.clientName,
-          clientPhn: req.body.clientDetails.clientPhn,
-          clientPin: req.body.clientDetails.clientPin,
-          clientCity: req.body.clientDetails.clientCity,
-          clientState: req.body.clientDetails.clientState,
-          clientArea: req.body.clientDetails.clientArea,
-          clientBuiding: req.body.clientDetails.clientBuiding,
-          clientLandmark: req.body.clientDetails.clientLandmark
-      }]
-      });
-      console.log("req.body.clientDetails..",req.body.clientDetails);
-      const token = generateToken(newUser,res);
-      res.json({ message: 'Success', nextPage: true });
-    } else {
-      res.json({ message: "Your otp is wrong", nextPage: false });
-    }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-}); */
 
 app.post('/newProduct', upload.single('productImage'), async (req, res) => {
   const imageName = req.file.filename;
@@ -352,7 +221,7 @@ app.post('/stripe', async (req, res) => {
   }
   try {
     const session = await stripe.checkout.sessions.create({
-      email: "pranesh.siva@gmail.com",
+      email: process.env.STRIPE_EMAIL,
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: req.body.AddedDetails.map((item) => {
